@@ -11,7 +11,7 @@ SecendPage::SecendPage(QWidget *parent) :
   ui->setupUi(this);
   {//datbase : sqlite
    UserPasswords = QSqlDatabase::addDatabase("QSQLITE");
-   UserPasswords.setDatabaseName("/Users/helia/UserPasswords.db");
+   UserPasswords.setDatabaseName("/Users/helia/Moon/UserPasswords.db");
 
    if(!UserPasswords.open()){
        qDebug() << "Failed To Connet Database!";
@@ -54,9 +54,7 @@ void SecendPage::on_pushButton_LogIn_clicked()//برای زمانی که طرف 
                                      "Username and Password correct!",
                                      "ok");
             ui->pushButton_LogIn->setText("continue");
-            IDpage * ptr = new IDpage;
-            this -> close();
-            ptr->show();
+            //next page : chat page :
           }
         else if(number<1){
             QMessageBox::warning(this,
@@ -185,18 +183,20 @@ void SecendPage::receivePassword(QString password)//مقایسه کد کپچا �
            return;
          }
        QSqlQuery query;//اطلاعات جدید فرد رو دخیره میکند
-          query.prepare("INSERT INTO UserPasswords (username , password) "
-                        "VALUES (?,?)");
+          query.prepare("INSERT INTO UserPasswords (username , password , userID) "
+                        "VALUES (?,?,?)");
           query.addBindValue(usernamenew);
           query.addBindValue(passwordnew);
           query.exec();
        QMessageBox::information(this,
           "EveryTHingIsGoingToBeOK",
-          "New Username and Password Saved",
+          "New Username and Password will be Saved",
           "ok");
-       IDpage * ptr = new IDpage;
-       this -> close();
+       //open new page ID:
+       IDpage * ptr = new IDpage(this);
        ptr->show();
+       //کانکت کردن صفحه گرفتن ای دی با صفحه دوم :
+       connect(ptr , SIGNAL(returnToSecondPageID(QString)), this, SLOT(receiveID(QString)));
      }
    else {//در غیر این صورت کاربر میتواند دوباره امتحان کند
       ui->pushButton_verify->setDisabled(false);
@@ -205,6 +205,23 @@ void SecendPage::receivePassword(QString password)//مقایسه کد کپچا �
                            "Wrong Verify Please Try Again : press verify",
                            "ok");
      }
+}
+
+void SecendPage::receiveID(QString userID){
+          /*
+          qDebug() << userID;
+          QSqlQuery query;
+          query.prepare("UPDATE UserPasswords SET id = :userID WHERE username = :username AND password = :password");
+          query.bindValue(":userid", userid);
+          query.bindValue(":username", username);
+          query.bindValue(":password", password);
+
+          if (query.exec()) {
+              qDebug() << "Id updated successfully";
+          } else {
+              qDebug() << "Error updating id:" << query.lastError().text();
+          }*/
+
 }
 SecendPage::~SecendPage()
 {

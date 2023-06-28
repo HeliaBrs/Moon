@@ -29,9 +29,10 @@ private slots:
   void on_pushButton_clicked();
 
   void on_pushButton_verify_clicked();
-
+  //for recieve information from pop-up
 public slots:
     void receivePassword(QString password);
+    void receiveID(QString userID);
 
 private:
   Ui::SecendPage *ui;
