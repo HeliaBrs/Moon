@@ -20,7 +20,8 @@ public:
   ~IDpage();
 
 private slots:
-  void on_lineEdit_returnPressed();
+
+  void on_pushButton_clicked();
 
 public:signals:
    void returnToSecondPageID(QString userID);

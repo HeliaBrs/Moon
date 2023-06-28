@@ -182,16 +182,6 @@ void SecendPage::receivePassword(QString password)//مقایسه کد کپچا �
                                 "OK");
            return;
          }
-       QSqlQuery query;//اطلاعات جدید فرد رو دخیره میکند
-          query.prepare("INSERT INTO UserPasswords (username , password , userID) "
-                        "VALUES (?,?,?)");
-          query.addBindValue(usernamenew);
-          query.addBindValue(passwordnew);
-          query.exec();
-       QMessageBox::information(this,
-          "EveryTHingIsGoingToBeOK",
-          "New Username and Password will be Saved",
-          "ok");
        //open new page ID:
        IDpage * ptr = new IDpage(this);
        ptr->show();
@@ -208,20 +198,22 @@ void SecendPage::receivePassword(QString password)//مقایسه کد کپچا �
 }
 
 void SecendPage::receiveID(QString userID){
-          /*
-          qDebug() << userID;
-          QSqlQuery query;
-          query.prepare("UPDATE UserPasswords SET id = :userID WHERE username = :username AND password = :password");
-          query.bindValue(":userid", userid);
-          query.bindValue(":username", username);
-          query.bindValue(":password", password);
-
+          QSqlQuery query;//اطلاعات جدید فرد رو دخیره میکند
+                    query.prepare("INSERT INTO UserPasswords"
+                                  "VALUES (?,?,?)");
+                    query.addBindValue(usernamenew);
+                    query.addBindValue(passwordnew);
+                    query.addBindValue(userID);
+                    query.exec();
+                 QMessageBox::information(this,
+                    "EveryTHingIsGoingToBeOK",
+                    "New Username and Password with userID will be Saved",
+                    "ok");
           if (query.exec()) {
               qDebug() << "Id updated successfully";
           } else {
               qDebug() << "Error updating id:" << query.lastError().text();
-          }*/
-
+          }
 }
 SecendPage::~SecendPage()
 {

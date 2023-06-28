@@ -3,6 +3,9 @@
 #include "QMessageBox"
 #include "QDebug"
 #include "secendpage.h"
+#include <iostream>
+
+using namespace std;
 
 IDpage::IDpage(QWidget *parent) :
   QMainWindow(parent),
@@ -38,38 +41,33 @@ IDpage::IDpage(QWidget *parent) :
      }
    }
 }
-void IDpage::on_lineEdit_returnPressed()
+void IDpage::on_pushButton_clicked()
 {
-    //چک کردن اینکه یوزنیم که وارد می شود قبلا استفاده نشده باشد
-    QString userID;
-    userID = ui->lineEdit->text();
+  // چک کردن اینکه یوزنیم که وارد می شود قبلا استفاده نشده باشد
+
+    QString userIDnew;
+    userIDnew = ui->lineEdit->text();
     QSqlQuery qry;
-    bool ID = 0 ;
-  while(!ID){
-    if(qry.exec("select * from UserPasswords where userID='"+userID+"'"))
+    if(qry.exec("select * from UserPasswords where userID='"+userIDnew+"'"))
       {
         int number = 0;
         while(qry.next())
           {
             number++;
           }//تعداد موارد تطبیق داده شده
-        if(number==1){//در صورتی که پیدا شد
-            QMessageBox::information(this,
-                                     "There is already exist!",
-                                     "ID had been already taken , please try another one!",
-                                     "ok");
+        if(number>0){//در صورتی که پیدا شد
+            QMessageBox::warning(this ,
+                                  "Same UserID found!" ,
+                                  "Yuor UserID already exict!",
+                                   "Please try another one");
           }
-        else {
-            emit returnToSecondPageID(userID);
-            ID = 1;
+        else if(number==0){
+            emit returnToSecondPageID(userIDnew);
+            this->close();
           }
       }
-    }
-    this->close();
 }
 IDpage::~IDpage()
 {
   delete ui;
 }
-
-
